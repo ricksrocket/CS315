@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script>
+
+    src = "https://scripts.sirv.com/sirvjs/v3/sirv.js"
+
+  
+
+
+
+/*eslint-disable*/
+
+
+    /**
+     * 
+     * @param {object} productData information/ data of a product
+     * @returns {HTMLElement} Product component(complex element combined of multiple elements)
+     */
+     function getProductComponent(productData = { imgSrc: "", title: "", vendor: "", rating: "", price: 0 }) {
+
+
+// create all of the tile elements
+let photoGridItem = document.createElement("div");//added by rick
+let cardImage = document.createElement("div");//added by rick (card-image container)
+let imgElement = document.createElement("img");
+let imgContainer = document.createElement("div");//main image container
+let titleElement = document.createElement("h4");
+let vendorElement = document.createElement("div");
+let ratingContainer = document.createElement("div");
+let ratingElement = document.createElement("div");//added by rick
+let priceElement = document.createElement("div");
+// let addToCartButton = document.createElement("button");
+let infoWrapper = document.createElement("div");
+let buttonWrapper = document.createElement("div");
+let eachProductContainer = document.createElement("div");
+let cartButtonContainer = document.createElement("div");//added by rick
+let cartButton = document.createElement("button");//added by rick
+// add phone text below the price element
+let phoneTextWP = document.createElement("div")
+let phoneTextFS = document.createElement("div")
+let phoneTextEA = document.createElement("div")
+let phoneTextIS = document.createElement("div")
+let phoneTextPU = document.createElement("div")
+
+// add anchor link to single product page
+let productAnchor = document.createElement("a")
+
+
+
+
+
+// additional setups - added by Rick
+// photoGridItem.className = "photo-grid-item"
+imgContainer.setAttribute("class", "Sirv-phone-image-main");
+// let productListContainer = document.getElementById("productListContainer");
+eachProductContainer.className = "photo-grid-item"
+vendorElement.className = "brand";
+ratingContainer.className = "rating-container";
+priceElement.className = "price";
+titleElement.className = "phone-heading";
+ratingElement.className = "rating";
+ratingElement.setAttribute("style", `--rating: ${productData.rating}`);
+cardImage.className = "card-image";
+productAnchor.className = "phone-heading";
+productAnchor.innerHTML = productData.title;
+productAnchor.style.fontSize="14px";
+productAnchor.style.fontFamily= "Arial, Helvetica, sans-serif";
+
+
+
+// setup cart-button
+cartButtonContainer.className = "cart-btn-container";
+cartButton.className = "cart-btn";
+cartButton.setAttribute("onclick", "")
+cartButton.innerHTML = "Add to Cart";
+cartButtonContainer.append(cartButton)
+
+//setup of phone text below pricing --- added by Rick
+ phoneTextWP.className="phone-text";
+ phoneTextFS.className="phone-text";
+ phoneTextEA.className="phone-text";
+ phoneTextIS.className="phone-text";
+ phoneTextPU.className="phone-text";
+ phoneTextFS.style.color = "green";
+ phoneTextIS.style.color = "green";
+ phoneTextWP.innerHTML = "When Purchased online";
+ phoneTextFS.innerHTML = "Free shipping"
+ phoneTextEA.innerHTML="Exclusions apply";
+ phoneTextIS.innerHTML="In stock in Burlington";
+ phoneTextPU.innerHTML= "Not eligible for pickup"
+
+
+// Setup main Image Component;
+imgContainer.style.height = "250px";
+// imgContainer.style.width = "250px";
+imgContainer.style.overflow = "hidden";
+imgElement.setAttribute("src", productData.imgSrc);
+imgElement.setAttribute("class", "phone-image-main");//added by rick
+imgElement.alt = productData.title//added by rick
+imgElement.style.height = "100%";//may need to add/modify to width 100%
+imgElement.style.margin = "0px auto";
+imgElement.style.width=100%
+imgContainer.append(imgElement);
+ratingContainer.append(ratingElement);//added by rick
+// photoGridItem.append(cardImage, cartButtonContainer);
+
+
+// area reserved for second "hover-over" image
+
+
+
+// Setup info wrapper 
+titleElement.innerText = productData.title;
+vendorElement.innerText = productData.vendor;
+ratingElement.innerHTML = productData.rating;//modify or delete
+priceElement.innerText = "$" + productData.price;
+infoWrapper.className = "info-container";
+infoWrapper.append(vendorElement, ratingContainer, priceElement,
+    phoneTextWP, phoneTextFS, phoneTextEA, phoneTextIS, phoneTextPU);
+cardImage.append(imgContainer, productAnchor, infoWrapper)
+
+// All product elements are inside eachProductContainer
+eachProductContainer.append(cardImage, cartButtonContainer)
+// imgContainer, infoWrapper); fix
+
+return eachProductContainer;
+}
+
+function generateProductElementList(products = []) {
+
+
+// get a list of corresponding product elements or components for each product
+// let productElements = products.map(product => getProductComponent(product));
+
+let productElements = [];
+
+for (let product of products) {
+    let productElement = getProductComponent(product);
+
+    productElements.push(productElement);
+}
+
+let productListContainer = document.getElementById("productListContainer");
+if (productListContainer !== null) {
+    productListContainer.remove();
+}
+
+productListContainer = document.createElement("div");
+productListContainer.setAttribute("id", "productListContainer");
+productListContainer.className = "photo-grid-container"//added by rick
+// productListContainer.setAttribute("style", "display: flex; flex-wrap: wrap; width: 100%;");
+productListContainer.append(...productElements);
+
+
+
+// change document body to any other element when the parent of product list container is defined
+document.body.append(productListContainer);
+}
+
+window.onload = windowOnloadHandler;
+function windowOnloadHandler() {
+
+let products = getProducts();
+generateProductElementList(products);
+let second = document.querySelector(".second");//added by Rick...read existing element to append to
+let productListContainer = document.getElementById("productListContainer");//added by Rick
+second.append(productListContainer)////added by Rick
+
+
+
+}
+
+function getProducts() {
+let products = [
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_f41fd0ae-7e4c-42ad-bae8-172c07f7d0d1",
+        title: "Boost Mobile Prepaid Samsung Galaxy A03s (32GB) Smartphone - Black",
+        vendor: "Samsung",
+        rating: "3.4",
+        price: 599.99
+    },
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_854cc1de-03b8-4952-b389-1ddcbdc25d0e",
+        title: "Tracfone Prepaid Apple iPhone XR 4G CDMA (64GB) - Black",
+        vendor: "Apple",
+        rating: "5",
+        price: 179.99
+    },
+    
+
+
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_cb29b7a2-6858-4324-b237-c7a8418398f0?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "VTech DECT 6.0 Expandable Cordless Phone with Answering Machine - 3 Handsets (CS5329-3)",
+        vendor: "V-tech",
+        rating: "4",
+        price: 59.99
+    },
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_fc3faa9a-3211-4700-ac88-aefcac59254b?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "Consumer Cellular ZTE Avid 589 (32GB) - Gray",
+        vendor: "Consumer Cellular",
+        rating: "4",
+        price: 59.99
+    },
+
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_08860a03-2e4d-45f1-b4b5-d43e4cb6005e?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "Samsung Galaxy A53 5G Unlocked (128GB) Smartphone - Black",
+        vendor: "Samsung",
+        rating: "3",
+        price: 449.99
+    },
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_1c6a2dd9-ce8a-4e1e-bd92-a2654c42fbe4?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "Motorola Moto 2022 G Stylus LTE Unlocked- Dark Blue",
+        vendor: "Motorola",
+        rating: "4.5",
+        price: 299.99
+    },
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_f96d5029-70c1-49f1-a67f-784302a50700?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "Tracfone Prepaid BLU View 2 (32GB) Smartphone - Black",
+        vendor: "BLU",
+        rating: "3.1",
+        price: 24.99
+    },
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_3e9d3000-4faf-4d67-93d1-74b9a9567aa5?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "Simple Mobile Prepaid Apple iPhone SE 2nd Gen (64GB) - White",
+        vendor: "Apple",
+        rating: "4.1",
+        price: 149.99
+    }
+    ,
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_feeb28ac-b403-4a05-ad00-1d2e5d17cd6c?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "Tracfone Prepaid Apple iPhone SE 2nd Gen (64GB) CDMA - Black",
+        vendor: "Apple",
+        rating: "4.4",
+        price: 189.99
+    }
+    ,
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_d859cd7e-2380-448d-a73d-db946882b653?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "GPO Retro GPODUKE Duke Push Button Telephone - Black",
+        vendor: "GPO Retro",
+        rating: "3.1",
+        price: 56.71
+    },
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_ed7229c3-e0d9-45a9-aa78-3293a8ab4f93?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "AT&T DECT 6.0 Big-Button Cordless Phone System",
+        vendor: "AT&T",
+        rating: "3",
+        price: 69.99
+    }
+    ,
+    {
+        imgSrc: "https://target.scene7.com/is/image/Target/GUEST_837426de-5e9f-4d20-a018-4a829eb1a89c?wid=253&hei=253&qlt=80&fmt=pjpeg",
+        title: "AT&T TR1909 Trimline Corded Phone with Caller ID - White",
+        vendor: "AT&T",
+        rating: "3.7",
+        price: 17.99
+    }
+];
+
+return products;
+
+
+}
+
+
+
+</script>
+
+
+
+<style>
+    /* site header styles */
+
+    .myDivFirstHeader {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        min-height: 55px;
+        /* grid-template-columns: 15% 1.3fr 1fr 15%; */
+        background-color: rgb(204, 0, 0);
+        padding: 10px;
+        font-size: 12px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        text-align: left;
+        /* overflow: hidden; */
+    }
+
+    .divInsideFirstHeader {
+        gap: 40px;
+        align-content: center;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .myDivSecondHeader {
+        height: 80px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-around;
+        align-content: center;
+        /* grid-template-columns: 18% 1fr 1fr 1fr 1fr 1fr 1fr 1fr 18%; */
+        padding: 10px;
+    }
+
+    .myDivSecondHeader a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+
+    /* site header styles end */
+
+
+    .photo-grid-container {
+        display: grid;
+        /* grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); */
+
+        gap: 20px;
+        max-width: 1100px;
+        margin: 20px auto;
+    }
+
+    .photo-grid-item {
+        box-sizing: border-box;
+        max-height: 575px;
+        background-color: rgb(247, 243, 243);
+        padding: 5px;
+        color: black;
+        font-size: 0.5rem;
+        line-height: 1.7;
+        overflow: auto;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        flex-direction: column;
+        /* height: 100vh; */
+        display: flex;
+    }
+
+
+
+    @media (min-width: 55em) {
+        .photo-grid {
+            grid-auto-flow: column;
+        }
+
+        .photo-grid-item:nth-child(3n+1) {
+            grid-column: 1;
+        }
+
+        .photo-grid-item:nth-child(3n+2) {
+            grid-column: 2;
+        }
+
+        .photo-grid-item:nth-child(3n+3) {
+            grid-column: 3;
+        }
+    }
+
+    .photo-image-main {
+        object-fit: contain;
+    }
+
+    .cart-btn-container .cart-btn {
+        font-weight: bold;
+        font-size: 12px;
+        background-color: #CC0000;
+        color: white;
+        width: 82px;
+        height: 32px;
+        border: none;
+        border-radius: 4px;
+
+    }
+
+    .filter-btn {
+        font: 16px;
+        font-family: Arial, Helvetica, sans-serif;
+        border: solid 1px lightgray;
+        color: rgb(85, 83, 83);
+        padding: 0px 12px;
+        height: 44px;
+        border-radius: 20px;
+        background-color: white;
+
+    }
+
+    .filter-banner {
+        display: flex;
+        margin-bottom: 8px;
+        font-size: 19px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .filter-item {
+        color: #333333;
+        height: 164px;
+        width: 120px;
+        font-size: 16px;
+        text-align: center;
+
+        text-decoration: none;
+    }
+
+    /* filter buttons styles */
+    a:link {
+
+        font: 16px;
+        font-family: Arial, Helvetica, sans-serif;
+        border: solid 1px lightgray;
+        color: rgb(85, 83, 83);
+
+        text-decoration: #CC0000;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration-line: underline;
+
+    }
+
+    .filter-img {
+        height: 100px;
+        width: 100px;
+    }
+
+    .filter-container {
+        justify-content: center;
+        display: flex;
+        text-align: center;
+    }
+
+    .phone-heading {
+        font: 18px;
+        font-weight: bold;
+    }
+
+    /* image hover section */
+    .card-image {
+        position: relative;
+        width: 360px;
+        /* can be omitted for a regular non-lazy image */
+        max-width: 100%;
+    }
+
+    .card-image img.phone-image-hover {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        object-fit: contain;
+        opacity: 0;
+        transition: opacity .7s;
+    }
+
+    .card-image:hover img.phone-image-hover {
+        opacity: 1;
+
+    }
+    img {
+        max-width: 100%;
+        max-height: 100%;
+        display: flex;
+        object-fit: contain;
+    }
+
+    /* from target grid*/
+    h3 {
+        padding-left: 20px;
+        font: 19px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: black;
+    }
+
+    label {
+        margin-right: 35px;
+    }
+
+    label.button {
+        background-color: rgb(47, 164, 207);
+        color: white;
+        border-radius: 3px;
+        padding: 2px;
+        font-size: 12px;
+    }
+
+    input {
+        font-size: 14px;
+        font-family: Helvetica, sans-serif;
+    }
+
+    /* body {
+  background-color: #BBB;
+  font-family: Helvetica, sans-serif;
+  padding-bottom: 100px;
+} */
+    .page_container {
+        margin-top: 10px;
+        max-width: 1080px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        background-color: white
+    }
+
+    .first {
+        background-color: white;
+        /* padding: 20px; */
+        display: flex;
+        flex-direction: column;
+        flex: 1
+    }
+
+    .blog_post {
+
+        background-color: rgb(247, 243, 243);
+
+        max-height: 900px;
+        /* border-style: solid; */
+        border-width: 1px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        gap: 20px;
+    }
+
+    .blog_post::after {
+        content: "";
+        clear: both;
+        display: flex;
+    }
+
+    .second {
+        /* background-color: rgb(223, 221, 221); */
+        background-color: white;
+        flex: 3.5;
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+        /* column-gap: 10px; */
+
+    }
+
+    .box_title {
+        color: black;
+        background-color: white;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        height: 25px;
+        padding-top: 10px;
+        padding-left: 25px;
+        font-size: 18px;
+        border: 0px;
+        border-bottom: 4px;
+        border-style: solid;
+        display: flex;
+        margin: auto;
+    }
+
+    .second-a {
+        background-color: white;
+        flex: 1;
+        margin-bottom: 10px;
+    }
+
+    .second-b {
+        background-color: white;
+        flex: 1;
+        margin-bottom: 10px;
+    }
+
+
+
+
+    ul {
+        list-style: none;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .left-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    h2 {
+        font-size: 19px;
+        font-family: Arial, Helvetica, sans-serif;
+
+    }
+
+    .left-box {
+        /* margin: 20 px;  */
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: white;
+        min-height: 94px;
+        min-width: 0;     
+        border-radius: 7px;
+        flex-basis: 1;
+    }
+
+    @media (max-width: 500px) {
+            .left-container {
+
+                flex-direction: row;
+            }
+        }
+    .left2 {
+
+        height: 114px;
+    }
+
+    /* star rating CSS */
+    :root {
+        --star-size: 12px;
+        --star-color: #fff;
+        --star-background: #fc0;
+    }
+
+    .rating {
+        --percent: calc(var(--rating) / 5 * 100%);
+
+        display: inline-block;
+        font-size: var(--star-size);
+        font-family: Times;
+        line-height: 1;
+    }
+
+    .rating::before {
+        content: '★★★★★';
+        letter-spacing: 3px;
+        background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+
+
+    .rating-container {
+        justify-content: center;
+        align-items: center;
+        /* height: 100vh; */
+    }
+
+    .rating {
+        height: 17px;
+        width: 60px;
+    }
+
+    .brand {
+        font-size: 12px;
+        font-family: Arial, Helvetica, sans-serif;
+        opacity: 60%;
+    }
+
+    .price {
+        font-size: 16px;
+        font-family: Arial, Helvetica, sans-serif;
+        opacity: 80%;
+    }
+
+    .phone-text {
+        
+        font-size: 12px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+</style>
+<!-- site header -->
+
+<body>
+
+
+    <div class="myDivFirstHeader">
+        <div style="margin-right: auto;">My Store: Burlington • Closes at 10pm</div>
+        <div class="divInsideFirstHeader">
+            <div>Registry</div>
+            <div>WeeklyAd</div>
+            <div>RedCard</div>
+            <div>TargetCircle</div>
+            <div>Find Store</div>
+        </div>
+    </div>
+
+    <div class="myDivSecondHeader">
+        <div></div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Target_Corporation_logo_%28vector%29.svg" alt=""
+            height="44px">
+
+
+
+
+
+        <div class="secondHeaderBtn">Categories</div>
+        <div class="secondHeaderBtn">Deals</div>
+        <div class="secondHeaderBtn">What's New</div>
+        <div class="secondHeaderBtn">Pickup & Delivery</div>
+
+        <div class="secondHeaderBtn"><input type="text" placeholder="Search" style="width: 300px;"></div>
+
+        <div class="secondHeaderBtn">Sign In
+
+            <label><img src="/https://target.scene7.com/is/content/Target/GUEST_ad24d0ff-62d6-4c7b-8b24-ae701e51b0f6"
+                    alt="" height="30" style="padding-left: 10px;"></label><label style="padding-left: 15px;">
+            </label>
+
+        </div>
+        <div><img src="/icons8-shopping-cart-24.png" alt="" height="30"></div>
+    </div>
+
+    <!-- <div style="display: flex; justify-content: center;">
+        <a href="/product-list.html" target="_blank"><img src="/phone.jpg" alt="" height="200px"></a>
+    </div> -->
+
+
+
+
+    <!-- rick's addition -->
+    <!-- 
+    <div style="display: flex; justify-content: space-between;">
+        <div style="border: 1px solid blue"></div>
+
+
+    </div>
+    </div>
+
+
+    </div> -->
+
+    <div class="page_container">
+
+        <div class="first">
+            <div class="blog_post">
+                <h3>How are you shopping today?</h3>
+                <div class="left-container">
+
+                    <div class="left-box">
+
+                        <h2>Picking up</h2>
+
+                        <div class="left-text">In-store pickup, ready within 2 hours</div>
+                    </div>
+
+                    <div class="left-box">
+
+                        <h2>Same Day Delivery</h2>
+
+                        <div class="left-text">Scheduled contactless delivery as soon as today</div>
+                    </div>
+
+                    <div class="left-box">
+                        <h2>Shipping</h2>
+
+                        <div class="left-text">Free with RedCard or $35 orders*</div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="second">
+
+            <!-- <div class="page-container">
+
+
+         </div> -->
+
+            <div class="filter-banner">
+                <div>Popular Filters</div>
+                <br>
+            </div>
+
+            <div class="filter-container">
+                <div class="filter-item">
+                    <a class="filter-link" href="https//www.google.com">
+                        <img class="filter-img"
+                            src="https://target.scene7.com/is/image/Target/GUEST_f41fd0ae-7e4c-42ad-bae8-172c07f7d0d1">
+                        <span>Cell Phone</span>
+                    </a>
+                </div>
+
+                <div class="filter-item">
+                    <a href="https//www.google.com">
+                        <img class="filter-img" height="100%"
+                            src="https://target.scene7.com/is/image/Target/GUEST_96742c1c-ae4e-427f-b647-b1495991a098?wid=120&amp;hei=120&amp;fmt=pjpeg"
+                            width="100%">
+                        <span>Cordless Phone</span>
+                    </a>
+                </div>
+
+                <div class="filter-item">
+                    <a href="https//www.google.com">
+                        <img class="filter-img" height="100%"
+                            src="https://target.scene7.com/is/image/Target/GUEST_f84dc0f0-1872-4e55-ac99-4f2da3791b65?wid=120&amp;hei=120&amp;fmt=pjpeg"
+                            width="100%">
+                        <span>Corded Phone</span>
+
+                    </a>
+                </div>
+
+                <div class="filter-item">
+                    <a href="https//www.google.com">
+                        <img class="filter-img" height="100%"
+                            src="https://target.scene7.com/is/image/Target/25-50216991-200212_1581494449561?wid=120&amp;hei=120&amp;fmt=pjpeg"
+                            width="100%">
+                        <span>$15 - $25</span>
+                    </a>
+                </div>
+
+                <div class="filter-item">
+                    <a href="https//www.google.com">
+                        <img class="filter-img" height="100%"
+                            src="https://target.scene7.com/is/image/Target/15-25216991-200212_1581494376047?wid=120&amp;hei=120&amp;fmt=pjpeg"
+                            width="100%">
+                        <span>$25 - $50</span>
+                    </a>
+                </div>
+
+                <div class="filter-item">
+                    <a href="https//www.google.com">
+                        <img class="filter-img" height="100%"
+                            src="https://target.scene7.com/is/image/Target/50-100216991-200212_1581494496827?wid=120&amp;hei=120&amp;fmt=pjpeg"
+                            width="100%">
+                        <span>$50 - $100</span>
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="button-container">
+                <button class="filter-btn">Filter</button>
+                <button class="filter-btn">Category</button>
+                <button class="filter-btn">Price</button>
+                <button class="filter-btn">Ratings</button>
+                <button class="filter-btn">Model</button>
+                <button class="filter-btn">Type</button>
+                <button class="filter-btn">Service For</button>
+                <button class="filter-btn">Brand</button>
+                <button class="filter-btn">Features</button>
+            </div>
+
+<!-- dynamic content gets inserted below here -->
+
+
+            
+
+
+        </div>
+    </div>
+</body>
+
+</html>
